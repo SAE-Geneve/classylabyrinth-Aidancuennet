@@ -1,15 +1,17 @@
-#include <map>
-#include "Player.h"
-#include "enemy.h"
-#include "tile.h"
+#pragma once
+#include <string>
 
 
-// An anonymous namespace just here so you cannot access there from somewhere
-// else.
-namespace {
+class World
+{
+public :
+	char GetTile(int x, int y);
+	
+	
+private:
 
 	// Map of the local space.
-	std::string local_world =
+	std::string world_ =
 		"########################" // 24 * 8
 		"#.....E......E.....#..P#" // P is at (22, 1)
 		"#######..#####..####...#"
@@ -19,5 +21,6 @@ namespace {
 		"#.........E............#"
 		"########################";
 
-	// Local player stuff.
 	
+	
+};

@@ -1,21 +1,39 @@
 #include <vector>
 #include "command.h"
+#include "player.h"
+#include "enemy.h"
+#include "character.h"
+#include "world.h"
+#include "tile.h"
+#include <iostream>
 
 namespace {
+	void set_player(const Player& player);
 
-	void cross_attack(Player player, Enemy enemy) 
+	void set_enemy(const Enemy& enemy, int i);
+
+	void erase_enemy(const Enemy& enemy, int i);
+
+	void cross_attack(Player player, Enemy enemy)
 	{
 		// Max is there to avoid giving health point in case too high defence.
-		player.health_points -= std::max(0, enemy.attack - player.defence);
-		enemy.health_points -= std::max(0, player.attack - enemy.defence);
+		player.health_points -= std::max(0, enemy.attack - player.defense);
+		enemy.health_points -= std::max(0, player.attack - enemy.defense);
 		set_player(player);
 		set_enemy(enemy, enemy.x, enemy.y);
+		if (enemy.health_points <= 0) {
+			printf("The enemy has died!\n");
+			erase_enemy(enemy, enemy.x, enemy.y);
+		}
+		if (player.health_points <= 0) {
+			printf("You have died!");
+		}
 	}
-
 }
 
-void north()
-{
+
+
+void north() {
 	Player player = get_player();
 	// Get the location at north of the current player.
 	TileType tile_type = get_tile_at_position(player.x, player.y - 1);
@@ -24,26 +42,23 @@ void north()
 		return;
 	player.y -= 1;
 	set_player(player);
+
 }
 
-void south()
-{
+void south() {
 	Player player = get_player();
-	// Get the location at north of the current player.
 	TileType tile_type = get_tile_at_position(player.x, player.y + 1);
-	// If the location is not empty do NOTHING!
 	if (tile_type != TileType::EMPTY)
 		return;
 	player.y += 1;
 	set_player(player);
+
 }
 
 void east()
 {
 	Player player = get_player();
-	// Get the location at north of the current player.
 	TileType tile_type = get_tile_at_position(player.x + 1, player.y);
-	// If the location is not empty do NOTHING!
 	if (tile_type != TileType::EMPTY)
 		return;
 	player.x += 1;
@@ -53,9 +68,7 @@ void east()
 void west()
 {
 	Player player = get_player();
-	// Get the location at north of the current player.
 	TileType tile_type = get_tile_at_position(player.x - 1, player.y);
-	// If the location is not empty do NOTHING!
 	if (tile_type != TileType::EMPTY)
 		return;
 	player.x -= 1;
@@ -85,6 +98,9 @@ void tick()
 	// Life regen.
 	Player player = get_player();
 	player.health_points += player.health_regen;
-	player.health_points = 
+	player.health_points =
 		std::min(player.health_points, player.max_health_points);
 }
+
+void move(){}
+

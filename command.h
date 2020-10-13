@@ -10,3 +10,4 @@ void west();
 void attack();
 
 void tick();
+void move();
